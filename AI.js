@@ -34,7 +34,7 @@ function drawconv_map(x,elements_name,reshape_x,reshape_y,width_plot,height_plot
   {
     z: x,
     type: 'heatmap',
-    colorscale: 'YIOrRd',
+    colorscale: 'YIGnBu',
     showlegend: false,
     showarrow: false,
     showscale: false,
@@ -76,7 +76,7 @@ async function run() {
 
   genderAI = await tf.loadModel('/res/model/model.json');
   
-  var tracker = new tracking.ObjectTracker('face');
+  var tracker = await new tracking.ObjectTracker('face');
 
   tracker.setInitialScale(4);
   tracker.setStepSize(2);
