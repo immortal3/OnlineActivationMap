@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+
+
+	<title>Gender Classification</title>
+	
+	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+
+	<style type="text/css">
+			.wecamcontainer {
+			  margin: 0 auto;
+			  position: relative;
+			}
+
+			#webcam {
+			  /*width: 100%;*/
+			  /*height: auto;*/
+			  position: absolute;
+			  top: 0;
+			  /*left: 0;*/
+			}
+
+			#canvas {
+			  position: absolute;
+			  top: 0;
+			  /*left: 0;*/
+			  /*z-index: 10;*/
+			  /*background-color:rgba(255,0,0,0.5);*/
+			}
+
+			.modebar{
+			      display: none !important;
+			}
+
+	</style>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.0"> </script>
+	<script src="res/libs/tracking-min.js"></script>
+	<script src="res/libs/face.js"></script>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+	<script type="text/javascript" src="AI.js"></script>
+
+	<!-- <script type="text/javascript" src="res/libs/jquery.facedetection.min.js"></script> -->
+
+</head>
+	
+<body style="background-color:#A5D6A7"> 
+	
+	<div class="pure-g" style="height: 320px">
+	    <div class="pure-u-1-3">
+	    	<p id="Information-1" style="color: Navy ; text-align: left; font-weight: bold;">
+	    		CNN(convolutional neural network) was trained on subset of <a href="https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/">IMDB-WIKI dataset</a>.<br/><br/>CNN has 3 conovolution layer and 2-hidden Layer.<br/><br/>Tracking.js is used for localization of face and then localized facial image is 
+	    		feeded into CNN.
+	    	</p>
+
+	    	<p id="prediction" style="font-weight: bold; color: Navy;"></p>
+	    </div>
+	    <div class="pure-u-1-3"> 
+		    <div class="wecamcontainer">                 
+		    	<video id="webcam" width="360" height="320" autoplay loop></video>
+				<canvas id="canvas" width="360" height="320" ></canvas>
+	    	</div>
+	    </div>
+	    <div class="pure-u-1-3">
+	    	<p id="Information-1" style="color: Navy ; text-align: left; font-weight: bold;">
+	    		<a href="res/pics/model.png">CNN Architecture Photo	</a>
+	    		<br/><br/> In Case, You're wondering why some of filters are not working. They're called
+	    		Dead filters. Dead filters are result of high learning rate.
+	    	</p>
+	    </div>
+	</div>
+
+
+	<div>
+		<p style="color: Navy ; text-align: center;  font-weight: bold;">
+			First Convolution Layer's Activation-Map
+		</p>
+	</div>
+
+	<div class="pure-g">
+	    <div class="pure-u-1-8" id = "fc_0"></div>
+	    <div class="pure-u-1-8" id = "fc_1"></div>
+	    <div class="pure-u-1-8" id = "fc_2"></div>
+	    <div class="pure-u-1-8" id = "fc_3"></div>
+	    <div class="pure-u-1-8" id = "fc_4"></div>
+	    <div class="pure-u-1-8" id = "fc_5"></div>
+	    <div class="pure-u-1-8" id = "fc_6"></div>
+	    <div class="pure-u-1-8" id = "fc_7"></div>
+	</div>
+
+	<div class="pure-g">
+	    <div class="pure-u-1-8" id = "fc_8"></div>
+	    <div class="pure-u-1-8" id = "fc_9"></div>
+	    <div class="pure-u-1-8" id = "fc_10"></div>
+	    <div class="pure-u-1-8" id = "fc_11"></div>
+	    <div class="pure-u-1-8" id = "fc_12"></div>
+	    <div class="pure-u-1-8" id = "fc_13"></div>
+	    <div class="pure-u-1-8" id = "fc_14"></div>
+	    <div class="pure-u-1-8" id = "fc_15"></div>
+	</div>
+
+
+	<div>
+		<p style="color: Navy ; text-align: center;  font-weight: bold;">
+			Second Convolution Layer's Activation-Map
+		</p>
+	</div>
+
+
+	<div class="pure-g">
+	    <div class="pure-u-1-16" id = "sc_0"></div>
+	    <div class="pure-u-1-16" id = "sc_1"></div>
+	    <div class="pure-u-1-16" id = "sc_2"></div>
+	    <div class="pure-u-1-16" id = "sc_3"></div>
+	    <div class="pure-u-1-16" id = "sc_4"></div>
+	    <div class="pure-u-1-16" id = "sc_5"></div>
+	    <div class="pure-u-1-16" id = "sc_6"></div>
+	    <div class="pure-u-1-16" id = "sc_7"></div>
+	    <div class="pure-u-1-16" id = "sc_8"></div>
+	    <div class="pure-u-1-16" id = "sc_9"></div>
+	    <div class="pure-u-1-16" id = "sc_10"></div>
+	    <div class="pure-u-1-16" id = "sc_11"></div>
+	    <div class="pure-u-1-16" id = "sc_12"></div>
+	    <div class="pure-u-1-16" id = "sc_13"></div>
+	    <div class="pure-u-1-16" id = "sc_14"></div>
+	    <div class="pure-u-1-16" id = "sc_15"></div>
+	</div>
+
+	<div class="pure-g">
+	    <div class="pure-u-1-16" id = "sc_16"></div>
+	    <div class="pure-u-1-16" id = "sc_17"></div>
+	    <div class="pure-u-1-16" id = "sc_18"></div>
+	    <div class="pure-u-1-16" id = "sc_19"></div>
+	    <div class="pure-u-1-16" id = "sc_20"></div>
+	    <div class="pure-u-1-16" id = "sc_21"></div>
+	    <div class="pure-u-1-16" id = "sc_22"></div>
+	    <div class="pure-u-1-16" id = "sc_23"></div>
+	    <div class="pure-u-1-16" id = "sc_24"></div>
+	    <div class="pure-u-1-16" id = "sc_25"></div>
+	    <div class="pure-u-1-16" id = "sc_26"></div>
+	    <div class="pure-u-1-16" id = "sc_27"></div>
+	    <div class="pure-u-1-16" id = "sc_28"></div>
+	    <div class="pure-u-1-16" id = "sc_29"></div>
+	    <div class="pure-u-1-16" id = "sc_30"></div>
+	    <div class="pure-u-1-16" id = "sc_31"></div>
+	</div>
+
+	<div>
+		<p style="color: Navy ; text-align: center;  font-weight: bold;">
+			Third Convolution Layer's Activation-Map
+		</p>
+	</div>
+
+
+	<div class="pure-g">
+		<div class="pure-u-1-32" id = "tc_0"></div>
+	    <div class="pure-u-1-32" id = "tc_1"></div>	
+	    <div class="pure-u-1-32" id = "tc_2"></div>
+	    <div class="pure-u-1-32" id = "tc_3"></div>
+	    <div class="pure-u-1-32" id = "tc_4"></div>
+	    <div class="pure-u-1-32" id = "tc_5"></div>
+	    <div class="pure-u-1-32" id = "tc_6"></div>
+	    <div class="pure-u-1-32" id = "tc_7"></div>
+	    <div class="pure-u-1-32" id = "tc_8"></div>
+	    <div class="pure-u-1-32" id = "tc_9"></div>
+	    <div class="pure-u-1-32" id = "tc_10"></div>
+	    <div class="pure-u-1-32" id = "tc_11"></div>
+	    <div class="pure-u-1-32" id = "tc_12"></div>
+	    <div class="pure-u-1-32" id = "tc_13"></div>
+	    <div class="pure-u-1-32" id = "tc_14"></div>
+	    <div class="pure-u-1-32" id = "tc_15"></div>
+	    <div class="pure-u-1-32" id = "tc_16"></div>
+	    <div class="pure-u-1-32" id = "tc_17"></div>	
+	    <div class="pure-u-1-32" id = "tc_18"></div>
+	    <div class="pure-u-1-32" id = "tc_19"></div>
+	    <div class="pure-u-1-32" id = "tc_20"></div>
+	    <div class="pure-u-1-32" id = "tc_21"></div>
+	    <div class="pure-u-1-32" id = "tc_22"></div>
+	    <div class="pure-u-1-32" id = "tc_23"></div>
+	    <div class="pure-u-1-32" id = "tc_24"></div>
+	    <div class="pure-u-1-32" id = "tc_25"></div>
+	    <div class="pure-u-1-32" id = "tc_26"></div>
+	    <div class="pure-u-1-32" id = "tc_27"></div>
+	    <div class="pure-u-1-32" id = "tc_28"></div>
+	    <div class="pure-u-1-32" id = "tc_29"></div>
+	    <div class="pure-u-1-32" id = "tc_30"></div>
+	    <div class="pure-u-1-32" id = "tc_31"></div>
+	</div>
+
+
+
+	<!-- <canvas id="cropped"></canvas>> -->
+
+	
+
+	
+
+</body>
+</html>>
