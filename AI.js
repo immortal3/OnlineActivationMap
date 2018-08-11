@@ -74,7 +74,7 @@ async function run() {
   var prediction_display = document.getElementById('prediction')
 
 
-  genderAI = await tf.loadModel('/res/model/model.json');
+  genderAI = await tf.loadModel('res/model/model.json');
   
   var tracker = await new tracking.ObjectTracker('face');
 
